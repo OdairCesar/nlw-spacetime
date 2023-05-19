@@ -1,5 +1,12 @@
 import './globals.css'
 import { ReactNode } from 'react'
+
+import { Copyright } from '@/components/Copyright'
+import { Hero } from '@/components/Hero'
+import { Profile } from '@/components/Profile'
+import { SignIn } from '@/components/SignIn'
+import { cookies } from 'next/headers'
+
 import {
   Roboto_Flex as Roboto,
   Bai_Jamjuree as BaiJamjuree,
@@ -10,6 +17,7 @@ const roboto = Roboto({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
   variable: '--font-roboto',
 })
+
 const baiJamjuree = BaiJamjuree({
   subsets: ['latin'],
   weight: ['700'],
@@ -22,12 +30,29 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+  const isAuth = cookies().has('token')
+
   return (
     <html lang="en">
       <body
         className={`${roboto.variable} ${baiJamjuree.variable} bg-gray-900 font-sans text-gray-100`}
       >
-        {children}
+        <main className="grid min-h-screen grid-cols-2">
+          <div className="relative flex flex-col items-start justify-between overflow-hidden border-r border-white/10 bg-[url(../assets/svg/bg-starts.svg)] bg-cover px-28 py-16">
+            <div className="absolute right-0 top-1/2 h-[200px] w-[526px] -translate-y-1/2 translate-x-1/2 rounded-full bg-purple-700 opacity-50 blur-full" />
+
+            <div className="absolute bottom-0 right-0 top-0 w-2 bg-stripes"></div>
+
+            {isAuth ? <Profile /> : <SignIn />}
+
+            <Hero />
+            <Copyright />
+          </div>
+
+          <div className="flex flex-col bg-[url(../assets/svg/bg-starts.svg)] bg-cover p-16">
+            {children}
+          </div>
+        </main>
       </body>
     </html>
   )
