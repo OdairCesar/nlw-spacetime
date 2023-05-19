@@ -40,7 +40,9 @@ export async function memoriesRoutes(app: FastifyInstance) {
     })
 
     if (!memory.isPublic && memory.userId !== request.user.sub) {
-      return reply.status(401).send()
+      return reply.status(401).send({
+        message: 'Sem permissão para essa busca',
+      })
     }
 
     return memory
@@ -89,7 +91,9 @@ export async function memoriesRoutes(app: FastifyInstance) {
     })
 
     if (memory.userId !== request.user.sub) {
-      return reply.status(401).send()
+      return reply.status(401).send({
+        message: 'Você so pode fazer mudança nas suas memorias',
+      })
     }
 
     memory = await prisma.memory.update({
@@ -120,7 +124,9 @@ export async function memoriesRoutes(app: FastifyInstance) {
     })
 
     if (memory.userId !== request.user.sub) {
-      return reply.status(401).send()
+      return reply.status(401).send({
+        message: 'Sem permissão para deletar essa memoria',
+      })
     }
 
     await prisma.memory.delete({
